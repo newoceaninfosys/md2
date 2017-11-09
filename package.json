@@ -5,6 +5,7 @@
   "author": "Dharmesh Pipariya <pipariyadharmesh@gmail.com>",
   "homepage": "https://github.com/Promact/md2",
   "bugs": "https://github.com/Promact/md2/issues",
+  "main": "./dist/md2/index.js",
   "repository": {
     "type": "git",
     "url": "https://github.com/Promact/md2.git"

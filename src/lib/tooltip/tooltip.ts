@@ -291,7 +291,7 @@ export type TooltipVisibility = 'initial' | 'visible' | 'hidden';
   moduleId: module.id,
   selector: 'md2-tooltip',
   templateUrl: 'tooltip.html',
-  styleUrls: ['tooltip.css'],
+  styleUrls: ['tooltip.scss'],
   animations: [
     trigger('state', [
       state('void', style({ transform: 'scale(0)' })),

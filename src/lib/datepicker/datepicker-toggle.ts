@@ -6,7 +6,7 @@ import { Md2Datepicker } from './datepicker';
   moduleId: module.id,
   selector: 'button[md2DatepickerToggle]',
   template: '',
-  styleUrls: ['datepicker-toggle.css'],
+  styleUrls: ['datepicker-toggle.scss'],
   host: {
     'type': 'button',
     'class': 'md2-datepicker-toggle',

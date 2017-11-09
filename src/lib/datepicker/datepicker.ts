@@ -60,7 +60,7 @@ let datepickerUid = 0;
   moduleId: module.id,
   selector: 'md2-datepicker-content',
   templateUrl: 'datepicker-content.html',
-  styleUrls: ['datepicker-content.css'],
+  styleUrls: ['datepicker-content.scss'],
   host: {
     'class': 'md2-datepicker-content',
     '[class.md2-datepicker-content-touch]': 'datepicker?.touchUi',
@@ -110,7 +110,7 @@ export const MD2_DATEPICKER_VALIDATORS: any = {
   moduleId: module.id,
   selector: 'md2-datepicker',
   templateUrl: 'datepicker.html',
-  styleUrls: ['datepicker.css'],
+  styleUrls: ['datepicker.scss'],
   providers: [MD2_DATEPICKER_VALUE_ACCESSOR, MD2_DATEPICKER_VALIDATORS],
   host: {
     'role': 'datepicker',

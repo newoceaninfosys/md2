@@ -172,7 +172,7 @@ export class Md2ColorChange {
   moduleId: module.id,
   selector: 'md2-colorpicker',
   templateUrl: 'colorpicker.html',
-  styleUrls: ['colorpicker.css'],
+  styleUrls: ['colorpicker.scss'],
   host: {
     'role': 'colorpicker',
     '[id]': 'id',

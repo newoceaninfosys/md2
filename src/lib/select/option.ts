@@ -47,7 +47,7 @@ export class Md2OptionSelectionChange {
     '[class.md2-option]': 'true',
   },
   template: '<ng-content></ng-content>',
-  styleUrls: ['option.css'],
+  styleUrls: ['option.scss'],
   encapsulation: ViewEncapsulation.None
 })
 export class Md2Option {

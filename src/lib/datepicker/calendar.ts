@@ -36,7 +36,7 @@ import { MATERIAL_COMPATIBILITY_MODE } from '../core';
   moduleId: module.id,
   selector: 'md2-calendar',
   templateUrl: 'calendar.html',
-  styleUrls: ['calendar.css'],
+  styleUrls: ['calendar.scss'],
   host: {
     '[class.md2-calendar]': 'true',
     'tabindex': '0',
@@ -147,9 +147,9 @@ export class Md2Calendar implements AfterContentInit {
   /** Handles date selection in the month view. */
   _dateSelected(date: Date): void {
     if (this.type == 'date') {
-      if (!this._util.sameDate(date, this.selected)) {
+      // if (!this._util.sameDate(date, this.selected)) {
         this.selectedChange.emit(date);
-      }
+      // }
     } else {
       this._activeDate = date;
       this._currentView = 'clock';

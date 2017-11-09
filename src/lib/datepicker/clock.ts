@@ -26,7 +26,7 @@ export type ClockView = 'hour' | 'minute';
   moduleId: module.id,
   selector: 'md2-clock',
   templateUrl: 'clock.html',
-  styleUrls: ['clock.css'],
+  styleUrls: ['clock.scss'],
   host: {
     'role': 'clock',
     '(mousedown)': '_handleMousedown($event)',

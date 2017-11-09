@@ -263,7 +263,7 @@ export class Md2DataTableSortBy implements OnInit {
 @Component({
   selector: 'md2-pagination',
   templateUrl: 'pagination.html',
-  styleUrls: ['data-table.css'],
+  styleUrls: ['data-table.scss'],
   exportAs: 'md2Pagination',
   encapsulation: ViewEncapsulation.None
 })

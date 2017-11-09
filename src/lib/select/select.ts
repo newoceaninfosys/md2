@@ -103,7 +103,7 @@ export type Md2SelectFloatPlaceholderType = 'always' | 'never' | 'auto';
   moduleId: module.id,
   selector: 'md2-select',
   templateUrl: 'select.html',
-  styleUrls: ['select.css'],
+  styleUrls: ['select.scss'],
   encapsulation: ViewEncapsulation.None,
   host: {
     'role': 'listbox',

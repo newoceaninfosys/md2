@@ -72,7 +72,7 @@ export class Md2TabLabel {
   moduleId: module.id,
   selector: 'md2-tabs',
   templateUrl: 'tabs.html',
-  styleUrls: ['tabs.css'],
+  styleUrls: ['tabs.scss'],
   host: {
     '[class]': 'class',
     '(window:resize)': 'onWindowResize()'

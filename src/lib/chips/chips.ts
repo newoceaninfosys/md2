@@ -61,7 +61,7 @@ export class Md2ChipsChange {
 @Component({
   selector: 'md2-chips',
   templateUrl: 'chips.html',
-  styleUrls: ['chips.css'],
+  styleUrls: ['chips.scss'],
   providers: [MD2_CHIPS_CONTROL_VALUE_ACCESSOR],
 
   host: {

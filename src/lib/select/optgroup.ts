@@ -15,7 +15,7 @@ let nextId = 0;
   moduleId: module.id,
   selector: 'md2-optgroup',
   templateUrl: 'optgroup.html',
-  styleUrls: ['optgroup.css'],
+  styleUrls: ['optgroup.scss'],
   encapsulation: ViewEncapsulation.None,
   inputs: ['disabled'],
   host: {

@@ -32,7 +32,7 @@ export class Md2AccordionHeader { }
       </div>
     </div>
   `,
-  styleUrls: ['accordion.css'],
+  styleUrls: ['accordion.scss'],
   animations: [
     trigger('slide', [
       state('up', style({ height: 0 })),

@@ -68,7 +68,7 @@ export class Md2DialogActions { }
   moduleId: module.id,
   selector: 'md2-dialog',
   templateUrl: 'dialog.html',
-  styleUrls: ['dialog.css'],
+  styleUrls: ['dialog.scss'],
   host: {
     'tabindex': '0',
     '[attr.role]': 'config?.role',
