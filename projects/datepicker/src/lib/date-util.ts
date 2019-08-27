@@ -1,29 +1,28 @@
-import { DateLocale } from './date-locale';
+import { DateLocale } from "./date-locale";
 
 export class DateUtil {
-
   _locale: DateLocale = new DateLocale();
 
   parseDateMap: any = {
-    'y': 0,      // placeholder -> ctorIndex
-    'Y': [0, -2000],
-    'M': [1, 1], // placeholder -> [ctorIndex, offset|value array]
-    'n': [1, this._locale.getMonthNames('short')],
-    'N': [1, this._locale.getMonthNames('long')],
-    'd': 2,
-    'm': 4,
-    'H': 3,
-    'h': 3,
-    'K': [3, 1],
-    'k': [3, 1],
-    's': 5,
-    'S': 6,
-    'a': [3, ['am', 'pm']],
-    'A': [3, ['AM', 'PM']]
+    y: 0, // placeholder -> ctorIndex
+    Y: [0, -2000],
+    M: [1, 1], // placeholder -> [ctorIndex, offset|value array]
+    n: [1, this._locale.getMonthNames("short")],
+    N: [1, this._locale.getMonthNames("long")],
+    d: 2,
+    m: 4,
+    H: 3,
+    h: 3,
+    K: [3, 1],
+    k: [3, 1],
+    s: 5,
+    S: 6,
+    a: [3, ["am", "pm"]],
+    A: [3, ["AM", "PM"]]
   };
 
   replace(s: string, regexp: any, sub?: string) {
-    return (s != null ? '' + s : '').replace(regexp, sub != null ? sub : '');
+    return (s != null ? "" + s : "").replace(regexp, sub != null ? sub : "");
   }
 
   startsWith(base: any, start: any) {
@@ -35,40 +34,51 @@ export class DateUtil {
   }
 
   isFunction(f: any) {
-    return this.isType(f, 'function');
+    return this.isType(f, "function");
   }
 
   isList(v: any) {
-    return !!v && v.length != null && !this.isString(v) && !this.isNode(v) && !this.isFunction(v);
+    return (
+      !!v &&
+      v.length != null &&
+      !this.isString(v) &&
+      !this.isNode(v) &&
+      !this.isFunction(v)
+    );
   }
 
   isString(s: any) {
-    return this.isType(s, 'string');
+    return this.isType(s, "string");
   }
 
   isObject(f: any) {
-    return !!f && this.isType(f, 'object');
+    return !!f && this.isType(f, "object");
   }
 
   isNode(n: any) {
-    return n && n['nodeType'];
+    return n && n["nodeType"];
   }
 
   isNumber(n: any) {
-    return this.isType(n, 'number');
+    return this.isType(n, "number");
   }
 
   getFindFunc(findFunc: any) {
-    return this.isFunction(findFunc) ? findFunc : (obj: any, index: any) => {
-      if (findFunc === obj) {
-        return index;
-      }
-    };
+    return this.isFunction(findFunc)
+      ? findFunc
+      : (obj: any, index: any) => {
+          if (findFunc === obj) {
+            return index;
+          }
+        };
   }
 
   getFindIndex(list: any, index: any, defaultIndex: any) {
-    return index == null ? defaultIndex :
-      index < 0 ? Math.max(list.length + index, 0) : Math.min(list.length, index);
+    return index == null
+      ? defaultIndex
+      : index < 0
+      ? Math.max(list.length + index, 0)
+      : Math.min(list.length, index);
   }
 
   find(list: any, findFunc: any, startIndex?: any, endIndex?: any) {
@@ -94,32 +104,36 @@ export class DateUtil {
       return null;
     }
 
-    if (match = /^\[([+-])(\d\d)(\d\d)\]\s*(.*)/.exec(format)) {
+    if ((match = /^\[([+-])(\d\d)(\d\d)\]\s*(.*)/.exec(format))) {
       timezoneOffsetMatch = match;
       format = match[4];
     }
 
-    let parser = new RegExp(format.replace(/(.)(\1*)(?:\[([^\]]*)\])?/g,
-      (wholeMatch, placeholderChar, placeholderDigits, param) => {
-        if (/[dmhkyhs]/i.test(placeholderChar)) {
-          indexMap[reIndex++] = placeholderChar;
-          let plen = placeholderDigits.length + 1;
-          return '(\\d' + (plen < 2 ? '+' : ('{1,' + plen + '}')) + ')';
-        } else if (placeholderChar == 'z') {
-          timezoneIndex = reIndex;
-          reIndex += 3;
-          return '([+-])(\\d\\d)(\\d\\d)';
-        } else if (/[NnaA]/.test(placeholderChar)) {
-          indexMap[reIndex++] = [placeholderChar, param && param.split(',')];
-          return '([a-zA-Z\\u0080-\\u1fff]+)';
-        } else if (/w/i.test(placeholderChar)) {
-          return '[a-zA-Z\\u0080-\\u1fff]+';
-        } else if (/\s/.test(placeholderChar)) {
-          return '\\s+';
-        } else {
-          return this.replace(wholeMatch, /[\\\[\]\/{}()*+?.$|^-]/g, '\\$&');
+    let parser = new RegExp(
+      format.replace(
+        /(.)(\1*)(?:\[([^\]]*)\])?/g,
+        (wholeMatch, placeholderChar, placeholderDigits, param) => {
+          if (/[dmhkyhs]/i.test(placeholderChar)) {
+            indexMap[reIndex++] = placeholderChar;
+            let plen = placeholderDigits.length + 1;
+            return "(\\d" + (plen < 2 ? "+" : "{1," + plen + "}") + ")";
+          } else if (placeholderChar == "z") {
+            timezoneIndex = reIndex;
+            reIndex += 3;
+            return "([+-])(\\d\\d)(\\d\\d)";
+          } else if (/[NnaA]/.test(placeholderChar)) {
+            indexMap[reIndex++] = [placeholderChar, param && param.split(",")];
+            return "([a-zA-Z\\u0080-\\u1fff]+)";
+          } else if (/w/i.test(placeholderChar)) {
+            return "[a-zA-Z\\u0080-\\u1fff]+";
+          } else if (/\s/.test(placeholderChar)) {
+            return "\\s+";
+          } else {
+            return this.replace(wholeMatch, /[\\\[\]\/{}()*+?.$|^-]/g, "\\$&");
+          }
         }
-      }));
+      )
+    );
 
     if (!(match = parser.exec(date))) {
       return undefined;
@@ -129,26 +143,27 @@ export class DateUtil {
     for (let i = 1; i < reIndex; i++) {
       let matchVal = match[i];
       let indexEntry: any = indexMap[i];
-      if (this.isList(indexEntry)) { // for a, n or N
+      if (this.isList(indexEntry)) {
+        // for a, n or N
         let placeholderChar = indexEntry[0];
         let mapEntry = this.parseDateMap[placeholderChar];
         let ctorIndex = mapEntry[0];
         let valList = indexEntry[1] || mapEntry[1];
-        let listValue = this.find(valList,
-          (v: any, index: any) => {
-            if (this.startsWith(matchVal.toLowerCase(), v.toLowerCase())) {
-              return index;
-            }
-          });
+        let listValue = this.find(valList, (v: any, index: any) => {
+          if (this.startsWith(matchVal.toLowerCase(), v.toLowerCase())) {
+            return index;
+          }
+        });
         if (listValue == null) {
           return undefined;
         }
-        if (placeholderChar == 'a' || placeholderChar == 'A') {
+        if (placeholderChar == "a" || placeholderChar == "A") {
           ctorArgs[ctorIndex] += listValue * 12;
         } else {
           ctorArgs[ctorIndex] = listValue;
         }
-      } else if (indexEntry) { // for numeric values (yHmMs)
+      } else if (indexEntry) {
+        // for numeric values (yHmMs)
         let value = parseFloat(matchVal);
         let mapEntry = this.parseDateMap[indexEntry];
         if (this.isList(mapEntry)) {
@@ -158,8 +173,15 @@ export class DateUtil {
         }
       }
     }
-    let d = new Date(ctorArgs[0], ctorArgs[1], ctorArgs[2], ctorArgs[3], ctorArgs[4],
-      ctorArgs[5], ctorArgs[6]);
+    let d = new Date(
+      ctorArgs[0],
+      ctorArgs[1],
+      ctorArgs[2],
+      ctorArgs[3],
+      ctorArgs[4],
+      ctorArgs[5],
+      ctorArgs[6]
+    );
     return d;
   }
 
@@ -168,7 +190,7 @@ export class DateUtil {
   }
 
   parse(value: any): Date | null {
-    let timestamp = typeof value == 'number' ? value : Date.parse(value);
+    let timestamp = typeof value == "number" ? value : Date.parse(value);
     return isNaN(timestamp) ? null : new Date(timestamp);
   }
 
@@ -196,15 +218,28 @@ export class DateUtil {
     return date.getSeconds();
   }
 
-  createDate(year: number, month: number, date: number,
-    hours: number, minutes: number, seconds: number): Date {
+  createDate(
+    year: number,
+    month: number,
+    date: number,
+    hours: number,
+    minutes: number,
+    seconds: number
+  ): Date {
     // Check for invalid month and date (except upper bound on date which we have to check after
     // creating the Date).
     if (month < 0 || month > 11 || date < 1) {
       return null;
     }
 
-    let result = this._createDateWithOverflow(year, month, date, hours, minutes, seconds);
+    let result = this._createDateWithOverflow(
+      year,
+      month,
+      date,
+      hours,
+      minutes,
+      seconds
+    );
 
     // Check that the date wasn't above the upper bound for the month, causing the month to
     // overflow.
@@ -216,13 +251,27 @@ export class DateUtil {
   }
 
   clone(date: Date): Date {
-    return this.createDate(this.getYear(date), this.getMonth(date), this.getDate(date),
-      this.getHours(date), this.getMinutes(date), this.getSeconds(date));
+    return this.createDate(
+      this.getYear(date),
+      this.getMonth(date),
+      this.getDate(date),
+      this.getHours(date),
+      this.getMinutes(date),
+      this.getSeconds(date)
+    );
   }
 
   getNumDaysInMonth(date: Date): number {
-    return this.getDate(this._createDateWithOverflow(
-      this.getYear(date), this.getMonth(date) + 1, 0, 0, 0, 0));
+    return this.getDate(
+      this._createDateWithOverflow(
+        this.getYear(date),
+        this.getMonth(date) + 1,
+        0,
+        0,
+        0,
+        0
+      )
+    );
   }
 
   addCalendarYears(date: Date, years: number): Date {
@@ -231,16 +280,30 @@ export class DateUtil {
 
   addCalendarMonths(date: Date, months: number): Date {
     let newDate = this._createDateWithOverflow(
-      this.getYear(date), this.getMonth(date) + months, this.getDate(date), this.getHours(date),
-      this.getMinutes(date), this.getSeconds(date));
+      this.getYear(date),
+      this.getMonth(date) + months,
+      this.getDate(date),
+      this.getHours(date),
+      this.getMinutes(date),
+      this.getSeconds(date)
+    );
 
     // It's possible to wind up in the wrong month if the original month has more days than the new
     // month. In this case we want to go to the last day of the desired month.
     // Note: the additional + 12 % 12 ensures we end up with a positive number, since JS % doesn't
     // guarantee this.
-    if (this.getMonth(newDate) != ((this.getMonth(date) + months) % 12 + 12) % 12) {
-      newDate = this._createDateWithOverflow(this.getYear(newDate), this.getMonth(newDate), 0,
-        this.getHours(newDate), this.getMinutes(newDate), this.getSeconds(newDate));
+    if (
+      this.getMonth(newDate) !=
+      (((this.getMonth(date) + months) % 12) + 12) % 12
+    ) {
+      newDate = this._createDateWithOverflow(
+        this.getYear(newDate),
+        this.getMonth(newDate),
+        0,
+        this.getHours(newDate),
+        this.getMinutes(newDate),
+        this.getSeconds(newDate)
+      );
     }
 
     return newDate;
@@ -248,32 +311,53 @@ export class DateUtil {
 
   addCalendarDays(date: Date, days: number): Date {
     return this._createDateWithOverflow(
-      this.getYear(date), this.getMonth(date), this.getDate(date) + days,
-      this.getHours(date), this.getMinutes(date), this.getSeconds(date));
+      this.getYear(date),
+      this.getMonth(date),
+      this.getDate(date) + days,
+      this.getHours(date),
+      this.getMinutes(date),
+      this.getSeconds(date)
+    );
   }
 
   addCalendarHours(date: Date, hours: number): Date {
     return this._createDateWithOverflow(
-      this.getYear(date), this.getMonth(date), this.getDate(date),
-      this.getHours(date) + hours, this.getMinutes(date), this.getSeconds(date));
+      this.getYear(date),
+      this.getMonth(date),
+      this.getDate(date),
+      this.getHours(date) + hours,
+      this.getMinutes(date),
+      this.getSeconds(date)
+    );
   }
 
   addCalendarMinutes(date: Date, minutes: number): Date {
     return this._createDateWithOverflow(
-      this.getYear(date), this.getMonth(date), this.getDate(date),
-      this.getHours(date), this.getMinutes(date) + minutes, this.getSeconds(date));
+      this.getYear(date),
+      this.getMonth(date),
+      this.getDate(date),
+      this.getHours(date),
+      this.getMinutes(date) + minutes,
+      this.getSeconds(date)
+    );
   }
   getISODateString(date: Date): string {
     return [
       date.getUTCFullYear(),
       this._2digit(date.getUTCMonth() + 1),
       this._2digit(date.getUTCDate())
-    ].join('-');
+    ].join("-");
   }
 
   /** Creates a date but allows the month and date to overflow. */
-  private _createDateWithOverflow(year: number, month: number, date: number,
-    hours: number, minutes: number, seconds: number) {
+  private _createDateWithOverflow(
+    year: number,
+    month: number,
+    date: number,
+    hours: number,
+    minutes: number,
+    seconds: number
+  ) {
     let result = new Date(year, month, date, hours, minutes, seconds);
 
     // We need to correct for the fact that JS native Date treats years in range [0, 99] as
@@ -290,13 +374,15 @@ export class DateUtil {
    * @returns The padded number.
    */
   private _2digit(n: number) {
-    return ('00' + n).slice(-2);
+    return ("00" + n).slice(-2);
   }
 
   compareDate(first: Date, second: Date): number {
-    return this.getYear(first) - this.getYear(second) ||
+    return (
+      this.getYear(first) - this.getYear(second) ||
       this.getMonth(first) - this.getMonth(second) ||
-      this.getDate(first) - this.getDate(second);
+      this.getDate(first) - this.getDate(second)
+    );
   }
 
   /**
@@ -305,8 +391,15 @@ export class DateUtil {
    * @returns Date
    */
   getFirstDateOfWeek(date: Date, firstDayOfWeek: number) {
-    let day: number = date.getDate() - ((7 + date.getDay() - firstDayOfWeek) % 7);
-    return new Date(date.getFullYear(), date.getMonth(), day, date.getHours(), date.getMinutes());
+    let day: number =
+      date.getDate() - ((7 + date.getDay() - firstDayOfWeek) % 7);
+    return new Date(
+      date.getFullYear(),
+      date.getMonth(),
+      day,
+      date.getHours(),
+      date.getMinutes()
+    );
   }
 
   /**
@@ -333,8 +426,13 @@ export class DateUtil {
    * @returns Date
    */
   getDateInNextMonth(date: Date) {
-    return new Date(date.getFullYear(), date.getMonth() + 1, 1,
-      date.getHours(), date.getMinutes());
+    return new Date(
+      date.getFullYear(),
+      date.getMonth() + 1,
+      1,
+      date.getHours(),
+      date.getMinutes()
+    );
   }
 
   /**
@@ -343,8 +441,13 @@ export class DateUtil {
    * @returns Date
    */
   getDateInPreviousMonth(date: Date) {
-    return new Date(date.getFullYear(), date.getMonth() - 1, 1,
-      date.getHours(), date.getMinutes());
+    return new Date(
+      date.getFullYear(),
+      date.getMonth() - 1,
+      1,
+      date.getHours(),
+      date.getMinutes()
+    );
   }
 
   /**
@@ -363,8 +466,28 @@ export class DateUtil {
    * @param Date d2
    * @returns boolean
    */
-  isSameMonthAndYear(d1: Date, d2: Date) {
-    return d1 && d2 && d1.getFullYear() === d2.getFullYear() && d1.getMonth() === d2.getMonth();
+  isSameMonthAndYear(d1: Date, d2: Date | Date[]) {
+    if (Array.isArray(d2)) {
+      let isSame = false;
+      for (let i = 0; i < d2.length; i++) {
+        isSame =
+          d1 &&
+          d2[i] &&
+          d1.getFullYear() === d2[i].getFullYear() &&
+          d1.getMonth() === d2[i].getMonth();
+        if (isSame) {
+          break;
+        }
+      }
+      return isSame;
+    }
+
+    return (
+      d1 &&
+      d2 &&
+      d1.getFullYear() === d2.getFullYear() &&
+      d1.getMonth() === d2.getMonth()
+    );
   }
 
   /**
@@ -374,7 +497,12 @@ export class DateUtil {
    * @returns boolean
    */
   isSameDay(d1: Date, d2: Date) {
-    return d1 && d2 && d1.getDate() == d2.getDate() && this.isSameMonthAndYear(d1, d2);
+    return (
+      d1 &&
+      d2 &&
+      d1.getDate() == d2.getDate() &&
+      this.isSameMonthAndYear(d1, d2)
+    );
   }
 
   /**
@@ -394,7 +522,9 @@ export class DateUtil {
    * @returns boolean
    */
   isSameMinute(d1: Date, d2: Date) {
-    return d1 && d2 && d1.getMinutes() == d2.getMinutes() && this.isSameHour(d1, d2);
+    return (
+      d1 && d2 && d1.getMinutes() == d2.getMinutes() && this.isSameHour(d1, d2)
+    );
   }
 
   /**
@@ -446,8 +576,13 @@ export class DateUtil {
    * @returns Date
    */
   incrementMinutes(date: Date, numberOfMinutes: number) {
-    return new Date(date.getFullYear(), date.getMonth(), date.getDate(),
-      date.getHours(), date.getMinutes() + numberOfMinutes);
+    return new Date(
+      date.getFullYear(),
+      date.getMonth(),
+      date.getDate(),
+      date.getHours(),
+      date.getMinutes() + numberOfMinutes
+    );
   }
 
   /**
@@ -457,8 +592,13 @@ export class DateUtil {
    * @returns Date
    */
   incrementHours(date: Date, numberOfHours: number) {
-    return new Date(date.getFullYear(), date.getMonth(), date.getDate(),
-      date.getHours() + numberOfHours, date.getMinutes());
+    return new Date(
+      date.getFullYear(),
+      date.getMonth(),
+      date.getDate(),
+      date.getHours() + numberOfHours,
+      date.getMinutes()
+    );
   }
 
   /**
@@ -468,8 +608,13 @@ export class DateUtil {
    * @returns Date
    */
   incrementDays(date: Date, numberOfDays: number) {
-    return new Date(date.getFullYear(), date.getMonth(), date.getDate() + numberOfDays,
-      date.getHours(), date.getMinutes());
+    return new Date(
+      date.getFullYear(),
+      date.getMonth(),
+      date.getDate() + numberOfDays,
+      date.getHours(),
+      date.getMinutes()
+    );
   }
 
   /**
@@ -485,8 +630,13 @@ export class DateUtil {
     // automatically advance *another* month by the number of missing days.
     // For example, if you try to go from Jan. 30 to Feb. 30, you'll end up on March 2.
     // So, we check if the month overflowed and go to the last day of the target month instead.
-    let dateInTargetMonth = new Date(date.getFullYear(), date.getMonth() + numberOfMonths, 1,
-      date.getHours(), date.getMinutes());
+    let dateInTargetMonth = new Date(
+      date.getFullYear(),
+      date.getMonth() + numberOfMonths,
+      1,
+      date.getHours(),
+      date.getMinutes()
+    );
     let numberOfDaysInMonth = this.getNumberOfDaysInMonth(dateInTargetMonth);
     if (numberOfDaysInMonth < date.getDate()) {
       dateInTargetMonth.setDate(numberOfDaysInMonth);
@@ -507,7 +657,10 @@ export class DateUtil {
    *     chronologically, this number will be negative.
    */
   getMonthDistance(start: Date, end: Date) {
-    return (12 * (end.getFullYear() - start.getFullYear())) + (end.getMonth() - start.getMonth());
+    return (
+      12 * (end.getFullYear() - start.getFullYear()) +
+      (end.getMonth() - start.getMonth())
+    );
   }
 
   /**
@@ -516,8 +669,13 @@ export class DateUtil {
    * @returns Date
    */
   getLastDateOfMonth(date: Date) {
-    return new Date(date.getFullYear(), date.getMonth(), this.getNumberOfDaysInMonth(date),
-      date.getHours(), date.getMinutes());
+    return new Date(
+      date.getFullYear(),
+      date.getMonth(),
+      this.getNumberOfDaysInMonth(date),
+      date.getHours(),
+      date.getMinutes()
+    );
   }
 
   /**
@@ -568,10 +726,16 @@ export class DateUtil {
    */
   isDateWithinRange(date: Date, minDate: Date, maxDate: Date) {
     let dateAtMidnight = this.createDateAtMidnight(date);
-    let minDateAtMidnight = this.isValidDate(minDate) ? this.createDateAtMidnight(minDate) : null;
-    let maxDateAtMidnight = this.isValidDate(maxDate) ? this.createDateAtMidnight(maxDate) : null;
-    return (!minDateAtMidnight || minDateAtMidnight <= dateAtMidnight) &&
-      (!maxDateAtMidnight || maxDateAtMidnight >= dateAtMidnight);
+    let minDateAtMidnight = this.isValidDate(minDate)
+      ? this.createDateAtMidnight(minDate)
+      : null;
+    let maxDateAtMidnight = this.isValidDate(maxDate)
+      ? this.createDateAtMidnight(maxDate)
+      : null;
+    return (
+      (!minDateAtMidnight || minDateAtMidnight <= dateAtMidnight) &&
+      (!maxDateAtMidnight || maxDateAtMidnight >= dateAtMidnight)
+    );
   }
 
   /**
@@ -584,8 +748,7 @@ export class DateUtil {
   isFullDateWithinRange(date: Date, minDate: Date, maxDate: Date) {
     minDate = this.isValidDate(minDate) ? minDate : null;
     maxDate = this.isValidDate(maxDate) ? maxDate : null;
-    return (!minDate || minDate <= date) &&
-      (!maxDate || maxDate >= date);
+    return (!minDate || minDate <= date) && (!maxDate || maxDate >= date);
   }
 
   /**
@@ -636,8 +799,8 @@ export class DateUtil {
    * @return number Time since epoch.
    */
   getTimestampFromNode(node: any) {
-    if (node && node.hasAttribute('data-timestamp')) {
-      return Number(node.getAttribute('data-timestamp'));
+    if (node && node.hasAttribute("data-timestamp")) {
+      return Number(node.getAttribute("data-timestamp"));
     }
   }
 
@@ -652,8 +815,12 @@ export class DateUtil {
     let month = date.getMonth();
     let year = date.getFullYear();
 
-    return (!minDate || minDate.getFullYear() < year || minDate.getMonth() <= month) &&
-      (!maxDate || maxDate.getFullYear() > year || maxDate.getMonth() >= month);
+    return (
+      (!minDate ||
+        minDate.getFullYear() < year ||
+        minDate.getMonth() <= month) &&
+      (!maxDate || maxDate.getFullYear() > year || maxDate.getMonth() >= month)
+    );
   }
 
   /**
@@ -664,12 +831,14 @@ export class DateUtil {
    *     a number greater than 0 if the first date is later.
    */
   compareDateAndTime(first: Date, second: Date): number {
-    return this.getYear(first) - this.getYear(second) ||
+    return (
+      this.getYear(first) - this.getYear(second) ||
       this.getMonth(first) - this.getMonth(second) ||
       this.getDate(first) - this.getDate(second) ||
       this.getHours(first) - this.getDate(second) ||
       this.getMinutes(first) - this.getDate(second) ||
-      this.getSeconds(first) - this.getDate(second);
+      this.getSeconds(first) - this.getDate(second)
+    );
   }
 
   /**
@@ -691,7 +860,8 @@ export class DateUtil {
    *     Null dates are considered equal to other null dates.
    */
   sameDateAndTime(first: Date | null, second: Date | null): boolean {
-    return first && second ? !this.compareDateAndTime(first, second) : first == second;
+    return first && second
+      ? !this.compareDateAndTime(first, second)
+      : first == second;
   }
-
 }

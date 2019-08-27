@@ -8,7 +8,7 @@ import {
   NgZone,
   Output,
   ViewEncapsulation
-} from '@angular/core';
+} from "@angular/core";
 import {
   DOWN_ARROW,
   END,
@@ -19,11 +19,10 @@ import {
   PAGE_UP,
   RIGHT_ARROW,
   UP_ARROW
-} from '../core/keyboard/keycodes';
-import { DateLocale } from './date-locale';
-import { DateUtil } from './date-util';
-import { slideCalendar } from './datepicker-animations';
-
+} from "../core/keyboard/keycodes";
+import { DateLocale } from "./date-locale";
+import { DateUtil } from "./date-util";
+import { slideCalendar } from "./datepicker-animations";
 
 /**
  * A calendar that is used as part of the datepicker.
@@ -31,30 +30,36 @@ import { slideCalendar } from './datepicker-animations';
  */
 @Component({
   // moduleId: module.id,
-  selector: 'md2-calendar',
-  templateUrl: 'calendar.html',
-  styleUrls: ['calendar.scss'],
+  selector: "md2-calendar",
+  templateUrl: "calendar.html",
+  styleUrls: ["calendar.scss"],
   host: {
-    '[class.md2-calendar]': 'true',
-    'tabindex': '0',
-    '(keydown)': '_handleCalendarBodyKeydown($event)',
+    "[class.md2-calendar]": "true",
+    tabindex: "0",
+    "(keydown)": "_handleCalendarBodyKeydown($event)"
   },
   animations: [slideCalendar],
   encapsulation: ViewEncapsulation.None,
-  changeDetection: ChangeDetectionStrategy.OnPush,
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class Md2Calendar implements AfterContentInit {
-
-  @Input() type: 'date' | 'time' | 'month' | 'datetime' = 'date';
+  @Input() type: "date" | "time" | "month" | "datetime" = "date";
 
   /** A date representing the period (month or year) to start the calendar in. */
   @Input() startAt: Date;
 
   /** Whether the calendar should be started in month or year view. */
-  @Input() startView: 'clock' | 'month' | 'year' = 'month';
+  @Input() startView: "clock" | "month" | "year" = "month";
 
   /** The currently selected date. */
-  @Input() selected: Date;
+  _selected: Date[];
+  @Input()
+  get selected(): Date[] {
+    return this._selected;
+  }
+  set selected(value: Date[]) {
+    this._selected = value;
+  }
 
   /** The minimum selectable date. */
   @Input() minDate: Date;
@@ -67,39 +72,54 @@ export class Md2Calendar implements AfterContentInit {
   /** A function used to filter which dates are selectable. */
   @Input() dateFilter: (date: Date) => boolean;
 
+  @Input() multiple = false;
+
   /** Emits when the currently selected date changes. */
   @Output() selectedChange = new EventEmitter<Date>();
+  @Output() ok = new EventEmitter<Date[]>();
 
   /** Date filter for the month and year views. */
   _dateFilterForViews = (date: Date) => {
-    return !!date &&
+    return (
+      !!date &&
       (!this.dateFilter || this.dateFilter(date)) &&
       (!this.minDate || this._util.compareDate(date, this.minDate) >= 0) &&
-      (!this.maxDate || this._util.compareDate(date, this.maxDate) <= 0);
-  }
+      (!this.maxDate || this._util.compareDate(date, this.maxDate) <= 0)
+    );
+  };
 
   /**
    * The current active date. This determines which time period is shown and which date is
    * highlighted when using keyboard navigation.
    */
-  get _activeDate(): Date { return this._clampedActiveDate; }
+  get _activeDate(): Date {
+    return this._clampedActiveDate;
+  }
   set _activeDate(value: Date) {
     let oldActiveDate = this._clampedActiveDate;
-    this._clampedActiveDate = this._util.clampDate(value, this.minDate, this.maxDate);
-    if (oldActiveDate && this._clampedActiveDate && this._currentView === 'month' &&
-      !this._util.isSameMonthAndYear(oldActiveDate, this._clampedActiveDate)) {
+    this._clampedActiveDate = this._util.clampDate(
+      value,
+      this.minDate,
+      this.maxDate
+    );
+    if (
+      oldActiveDate &&
+      this._clampedActiveDate &&
+      this._currentView === "month" &&
+      !this._util.isSameMonthAndYear(oldActiveDate, this._clampedActiveDate)
+    ) {
       if (this._util.isInNextMonth(oldActiveDate, this._clampedActiveDate)) {
-        this.calendarState('right');
+        this.calendarState("right");
       } else {
-        this.calendarState('left');
+        this.calendarState("left");
       }
     }
   }
   private _clampedActiveDate: Date;
 
   /** Whether the calendar is in month view. */
-  _currentView: 'clock' | 'month' | 'year' = 'month';
-  _clockView: 'hour' | 'minute' = 'hour';
+  _currentView: "clock" | "month" | "year" = "month";
+  _clockView: "hour" | "minute" = "hour";
 
   /** The label for the current calendar view. */
   get _yearLabel(): string {
@@ -107,8 +127,9 @@ export class Md2Calendar implements AfterContentInit {
   }
 
   get _monthYearLabel(): string {
-    return this._currentView === 'month' ? this._locale.getMonthLabel(this._activeDate) :
-      this._locale.getYearName(this._activeDate);
+    return this._currentView === "month"
+      ? this._locale.getMonthLabel(this._activeDate)
+      : this._locale.getYearName(this._activeDate);
   }
 
   get _dateLabel(): string {
@@ -116,62 +137,85 @@ export class Md2Calendar implements AfterContentInit {
   }
 
   get _hoursLabel(): string {
-    return ('0' + this._locale.getHoursLabel(this._activeDate)).slice(-2);
+    return ("0" + this._locale.getHoursLabel(this._activeDate)).slice(-2);
   }
 
   get _minutesLabel(): string {
-    return ('0' + this._locale.getMinutesLabel(this._activeDate)).slice(-2);
+    return ("0" + this._locale.getMinutesLabel(this._activeDate)).slice(-2);
   }
 
   _calendarState: string;
 
-  constructor(private _elementRef: ElementRef, private _ngZone: NgZone,
-    private _locale: DateLocale, private _util: DateUtil) {
-  }
+  constructor(
+    private _elementRef: ElementRef,
+    private _ngZone: NgZone,
+    private _locale: DateLocale,
+    private _util: DateUtil
+  ) {}
 
   ngAfterContentInit() {
     this._activeDate = this.startAt || this._util.today();
     this._elementRef.nativeElement.focus();
-    if (this.type === 'month') {
-      this._currentView = 'year';
-    } else if (this.type === 'time') {
-      this._currentView = 'clock';
+    if (this.type === "month") {
+      this._currentView = "year";
+    } else if (this.type === "time") {
+      this._currentView = "clock";
     } else {
-      this._currentView = this.startView || 'month';
+      this._currentView = this.startView || "month";
     }
   }
 
   /** Handles date selection in the month view. */
   _dateSelected(date: Date): void {
-    if (this.type == 'date') {
-      // if (!this._util.sameDate(date, this.selected)) {
-        this.selectedChange.emit(date);
-      // }
-    } else {
+    if (this.multiple && this.type === "date") {
+      const isSelected = this._selected.findIndex(s =>
+        this._isSameDate(s, date)
+      );
+      if (isSelected > -1) {
+        this._selected = [
+          ...this._selected.slice(0, isSelected),
+          ...this._selected.slice(isSelected + 1, this._selected.length)
+        ];
+      } else {
+        this._selected = [...this._selected, date];
+      }
+
       this._activeDate = date;
-      this._currentView = 'clock';
+    } else {
+      if (this.type == "date") {
+        this.selectedChange.emit(date);
+      } else {
+        this._activeDate = date;
+        this._currentView = "clock";
+      }
+    }
+  }
+
+  _ok(): void {
+    if (this.multiple && this.type === "date") {
+      this.ok.emit(this._selected);
     }
   }
 
   /** Handles month selection in the year view. */
   _monthSelected(month: Date): void {
-    if (this.type == 'month') {
+    if (this.type == "month") {
       if (!this._util.isSameMonthAndYear(month, this.selected)) {
         this.selectedChange.emit(this._util.getFirstDateOfMonth(month));
       }
     } else {
       this._activeDate = month;
-      this._currentView = 'month';
-      this._clockView = 'hour';
+      this._currentView = "month";
+      this._clockView = "hour";
     }
   }
 
   _timeSelected(date: Date): void {
-    if (this._clockView !== 'minute') {
+    if (this._clockView !== "minute") {
       this._activeDate = date;
-      this._clockView = 'minute';
+      this._clockView = "minute";
     } else {
-      if (!this._util.sameDateAndTime(date, this.selected)) {
+      if (!this._util.sameDateAndTime(date, this.selected[0])) {
         this.selectedChange.emit(date);
       }
     }
@@ -182,33 +226,35 @@ export class Md2Calendar implements AfterContentInit {
   }
 
   _yearClicked(): void {
-    this._currentView = 'year';
+    this._currentView = "year";
   }
   _dateClicked(): void {
-    this._currentView = 'month';
+    this._currentView = "month";
   }
 
   _hoursClicked(): void {
-    this._currentView = 'clock';
-    this._clockView = 'hour';
+    this._currentView = "clock";
+    this._clockView = "hour";
   }
   _minutesClicked(): void {
-    this._currentView = 'clock';
-    this._clockView = 'minute';
+    this._currentView = "clock";
+    this._clockView = "minute";
   }
 
   /** Handles user clicks on the previous button. */
   _previousClicked(): void {
-    this._activeDate = this._currentView === 'month' ?
-      this._util.addCalendarMonths(this._activeDate, -1) :
-      this._util.addCalendarYears(this._activeDate, -1);
+    this._activeDate =
+      this._currentView === "month"
+        ? this._util.addCalendarMonths(this._activeDate, -1)
+        : this._util.addCalendarYears(this._activeDate, -1);
   }
 
   /** Handles user clicks on the next button. */
   _nextClicked(): void {
-    this._activeDate = this._currentView === 'month' ?
-      this._util.addCalendarMonths(this._activeDate, 1) :
-      this._util.addCalendarYears(this._activeDate, 1);
+    this._activeDate =
+      this._currentView === "month"
+        ? this._util.addCalendarMonths(this._activeDate, 1)
+        : this._util.addCalendarYears(this._activeDate, 1);
   }
 
   /** Whether the previous period button is enabled. */
@@ -229,21 +275,29 @@ export class Md2Calendar implements AfterContentInit {
     // TODO(mmalerba): We currently allow keyboard navigation to disabled dates, but just prevent
     // disabled ones from being selected. This may not be ideal, we should look into whether
     // navigation should skip over disabled dates, and if so, how to implement that efficiently.
-    if (this._currentView === 'month') {
+    if (this._currentView === "month") {
       this._handleCalendarBodyKeydownInMonthView(event);
-    } else if (this._currentView === 'year') {
+    } else if (this._currentView === "year") {
       this._handleCalendarBodyKeydownInYearView(event);
     } else {
       this._handleCalendarBodyKeydownInClockView(event);
     }
   }
 
+  private _isSameDate(date1: Date, date2: Date): boolean {
+    return (
+      this._util.getYear(date1) === this._util.getYear(date2) &&
+      this._util.getMonth(date1) === this._util.getMonth(date2) &&
+      this._util.getDate(date1) === this._util.getDate(date2)
+    );
+  }
+
   /** Whether the two dates represent the same view in the current view mode (month or year). */
   private _isSameView(date1: Date, date2: Date): boolean {
-    return this._currentView === 'month' ?
-      this._util.getYear(date1) == this._util.getYear(date2) &&
-      this._util.getMonth(date1) == this._util.getMonth(date2) :
-      this._util.getYear(date1) == this._util.getYear(date2);
+    return this._currentView === "month"
+      ? this._util.getYear(date1) == this._util.getYear(date2) &&
+          this._util.getMonth(date1) == this._util.getMonth(date2)
+      : this._util.getYear(date1) == this._util.getYear(date2);
   }
 
   /** Handles keydown events on the calendar body when calendar is in month view. */
@@ -262,23 +316,27 @@ export class Md2Calendar implements AfterContentInit {
         this._activeDate = this._util.addCalendarDays(this._activeDate, 7);
         break;
       case HOME:
-        this._activeDate = this._util.addCalendarDays(this._activeDate,
-          1 - this._util.getDate(this._activeDate));
+        this._activeDate = this._util.addCalendarDays(
+          this._activeDate,
+          1 - this._util.getDate(this._activeDate)
+        );
         break;
       case END:
-        this._activeDate = this._util.addCalendarDays(this._activeDate,
-          (this._util.getNumDaysInMonth(this._activeDate) -
-            this._util.getDate(this._activeDate)));
+        this._activeDate = this._util.addCalendarDays(
+          this._activeDate,
+          this._util.getNumDaysInMonth(this._activeDate) -
+            this._util.getDate(this._activeDate)
+        );
         break;
       case PAGE_UP:
-        this._activeDate = event.altKey ?
-          this._util.addCalendarYears(this._activeDate, -1) :
-          this._util.addCalendarMonths(this._activeDate, -1);
+        this._activeDate = event.altKey
+          ? this._util.addCalendarYears(this._activeDate, -1)
+          : this._util.addCalendarMonths(this._activeDate, -1);
         break;
       case PAGE_DOWN:
-        this._activeDate = event.altKey ?
-          this._util.addCalendarYears(this._activeDate, 1) :
-          this._util.addCalendarMonths(this._activeDate, 1);
+        this._activeDate = event.altKey
+          ? this._util.addCalendarYears(this._activeDate, 1)
+          : this._util.addCalendarMonths(this._activeDate, 1);
         break;
       case ENTER:
         if (this._dateFilterForViews(this._activeDate)) {
@@ -312,20 +370,28 @@ export class Md2Calendar implements AfterContentInit {
         this._activeDate = this._nextMonthInSameCol(this._activeDate);
         break;
       case HOME:
-        this._activeDate = this._util.addCalendarMonths(this._activeDate,
-          -this._util.getMonth(this._activeDate));
+        this._activeDate = this._util.addCalendarMonths(
+          this._activeDate,
+          -this._util.getMonth(this._activeDate)
+        );
         break;
       case END:
-        this._activeDate = this._util.addCalendarMonths(this._activeDate,
-          11 - this._util.getMonth(this._activeDate));
+        this._activeDate = this._util.addCalendarMonths(
+          this._activeDate,
+          11 - this._util.getMonth(this._activeDate)
+        );
         break;
       case PAGE_UP:
-        this._activeDate =
-          this._util.addCalendarYears(this._activeDate, event.altKey ? -10 : -1);
+        this._activeDate = this._util.addCalendarYears(
+          this._activeDate,
+          event.altKey ? -10 : -1
+        );
         break;
       case PAGE_DOWN:
-        this._activeDate =
-          this._util.addCalendarYears(this._activeDate, event.altKey ? 10 : 1);
+        this._activeDate = this._util.addCalendarYears(
+          this._activeDate,
+          event.altKey ? 10 : 1
+        );
         break;
       case ENTER:
         this._monthSelected(this._activeDate);
@@ -343,14 +409,16 @@ export class Md2Calendar implements AfterContentInit {
   private _handleCalendarBodyKeydownInClockView(event: KeyboardEvent): void {
     switch (event.keyCode) {
       case UP_ARROW:
-        this._activeDate = this._clockView == 'hour' ?
-          this._util.addCalendarHours(this._activeDate, 1) :
-          this._util.addCalendarMinutes(this._activeDate, 1);
+        this._activeDate =
+          this._clockView == "hour"
+            ? this._util.addCalendarHours(this._activeDate, 1)
+            : this._util.addCalendarMinutes(this._activeDate, 1);
         break;
       case DOWN_ARROW:
-        this._activeDate = this._clockView == 'hour' ?
-          this._util.addCalendarHours(this._activeDate, -1) :
-          this._util.addCalendarMinutes(this._activeDate, -1);
+        this._activeDate =
+          this._clockView == "hour"
+            ? this._util.addCalendarHours(this._activeDate, -1)
+            : this._util.addCalendarMinutes(this._activeDate, -1);
         break;
       case ENTER:
         this._timeSelected(this._activeDate);
@@ -371,8 +439,12 @@ export class Md2Calendar implements AfterContentInit {
   private _prevMonthInSameCol(date: Date): Date {
     // Determine how many months to jump forward given that there are 2 empty slots at the beginning
     // of each year.
-    let increment = this._util.getMonth(date) <= 4 ? -5 :
-      (this._util.getMonth(date) >= 7 ? -7 : -12);
+    let increment =
+      this._util.getMonth(date) <= 4
+        ? -5
+        : this._util.getMonth(date) >= 7
+        ? -7
+        : -12;
     return this._util.addCalendarMonths(date, increment);
   }
 
@@ -383,8 +455,12 @@ export class Md2Calendar implements AfterContentInit {
   private _nextMonthInSameCol(date: Date): Date {
     // Determine how many months to jump forward given that there are 2 empty slots at the beginning
     // of each year.
-    let increment = this._util.getMonth(date) <= 4 ? 7 :
-      (this._util.getMonth(date) >= 7 ? 5 : 12);
+    let increment =
+      this._util.getMonth(date) <= 4
+        ? 7
+        : this._util.getMonth(date) >= 7
+        ? 5
+        : 12;
     return this._util.addCalendarMonths(date, increment);
   }
 
@@ -393,7 +469,6 @@ export class Md2Calendar implements AfterContentInit {
   }
 
   _calendarStateDone() {
-    this._calendarState = '';
+    this._calendarState = "";
   }
-
 }

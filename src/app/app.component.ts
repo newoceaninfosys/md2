@@ -10,6 +10,8 @@ export class AppComponent {
   title = "Custom MD2";
   public frm: FormGroup;
   public today = new Date();
+  public startAt = new Date(new Date().setDate(new Date().getDate() + 1));
+  public max = new Date(new Date().setMonth(new Date().getMonth() + 1));
   constructor() {
     this.frm = new FormGroup({
       date: new FormControl(new Date(), [Validators.required])

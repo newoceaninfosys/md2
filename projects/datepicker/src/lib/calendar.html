@@ -18,6 +18,9 @@
                                                                      (click)="_minutesClicked()">{{ _minutesLabel }}</span>
     </span>
   </div>
+  <div class="md2-calendar-footer">
+    <Button class="mat-raised-button mat-button-base" *ngIf="multiple && type === 'date'" (click)="_ok()">Confirm</Button>
+  </div>
 </div>
 <div class="md2-calendar-content" [ngSwitch]="_currentView">
   <div class="md2-month-content" *ngIf="_currentView === 'month' || _currentView === 'year'">
@@ -43,13 +46,13 @@
   </div>
   <md2-month-view *ngSwitchCase="'month'"
                   [activeDate]="_activeDate"
-                  [selected]="selected"
+                  [selected]="_selected"
                   [dateFilter]="_dateFilterForViews"
                   (selectedChange)="_dateSelected($event)">
   </md2-month-view>
   <md2-year-view *ngSwitchCase="'year'"
                  [activeDate]="_activeDate"
-                 [selected]="selected"
+                 [selected]="_selected"
                  [dateFilter]="_dateFilterForViews"
                  (selectedChange)="_monthSelected($event)">
   </md2-year-view>

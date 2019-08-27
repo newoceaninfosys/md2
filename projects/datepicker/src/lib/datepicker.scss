@@ -25,18 +25,18 @@ md2-datepicker {
 
 .md2-datepicker-trigger {
   display: block;
-  padding: 18px 0 4px 46px;
+  padding: 18px 0 4px 0;
   white-space: nowrap;
 }
 
 .md2-datepicker-button {
   position: absolute;
-  top: 13px;
-  left: 0;
+  top: 0;
+  right: 0;
   display: inline-block;
-  height: 40px;
-  width: 40px;
-  padding: 8px;
+  height: 30px;
+  width: 30px;
+  padding: 3px;
   line-height: 24px;
   color: rgba(black, 0.54);
   fill: currentColor;
@@ -50,6 +50,8 @@ md2-datepicker {
   vertical-align: middle;
   align-items: center;
   text-align: center;
+  display: flex;
+  justify-content: center;
 
   &:focus {
     background-color: rgba(158, 158, 158, 0.2);
@@ -70,11 +72,16 @@ md2-datepicker {
   min-width: $md2-datepicker-trigger-min-width;
   line-height: 22px;
   position: relative;
-  padding-right: 20px;
+  padding-right: 35px;
   box-sizing: border-box;
 
-  [aria-disabled='true'] & {
-    background-image: linear-gradient(to right, rgba(black, 0.26) 0, rgba(black, 0.26) 33%, transparent 0);
+  [aria-disabled="true"] & {
+    background-image: linear-gradient(
+      to right,
+      rgba(black, 0.26) 0,
+      rgba(black, 0.26) 33%,
+      transparent 0
+    );
     background-size: 4px 1px;
     background-repeat: repeat-x;
     border-color: transparent;
@@ -82,7 +89,6 @@ md2-datepicker {
     cursor: default;
     user-select: none;
   }
-
 
   &.md2-datepicker-input-focused {
     color: $primary;
@@ -114,7 +120,7 @@ md2-datepicker {
     transform: translate3d(0, 6px, 0) scale(0.75);
   }
 
-  [dir='rtl'] & {
+  [dir="rtl"] & {
     right: 0;
     left: 18px;
     transform-origin: right top;
@@ -125,8 +131,8 @@ md2-datepicker {
     }
   }
 
-  [aria-required=true] &::after {
-    content: '*';
+  [aria-required="true"] &::after {
+    content: "*";
     color: #fd0f0f;
   }
 }
@@ -146,7 +152,7 @@ md2-datepicker {
     color: rgba(black, 0.38);
   }
 
-  [dir='rtl'] & {
+  [dir="rtl"] & {
     left: auto;
     right: 0;
   }

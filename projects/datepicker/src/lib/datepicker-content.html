@@ -9,5 +9,7 @@
               [maxDate]="datepicker._maxDate"
               [dateFilter]="datepicker._dateFilter"
               [selected]="datepicker._selected"
-              (selectedChange)="datepicker._selectAndClose($event)">
+              (selectedChange)="datepicker._selectAndClose($event)"
+              [multiple]="datepicker._multiple"
+              (ok)="datepicker._ok($event)">
 </md2-calendar>

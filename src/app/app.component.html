@@ -4,7 +4,8 @@
     {{title}}
   </h1>
   <form id="form" [formGroup]="frm" name="form" role="form" novalidate="">
-    <md2-datepicker [min]="today" formControlName="date" (change)="onDateChange($event)"></md2-datepicker>
+    <md2-datepicker [startAt]="startAt" [min]="today" [max]="max" formControlName="date" (change)="onDateChange($event)"
+      placeholder="Hello 123" [multiple]="true"></md2-datepicker>
   </form>
 </div>
 

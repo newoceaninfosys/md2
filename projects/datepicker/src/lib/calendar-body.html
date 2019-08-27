@@ -26,7 +26,7 @@
       [attr.aria-disabled]="!item.enabled || null"
       (click)="_cellClicked(item)">
     <div class="md2-calendar-body-cell-content"
-         [class.md2-calendar-body-selected]="selectedValue === item.value"
+         [class.md2-calendar-body-selected]="isSelected(item.value)"
          [class.md2-calendar-body-today]="todayValue === item.value">
       {{item.displayValue}}
     </div>
