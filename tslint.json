@@ -1,75 +1,92 @@
 {
-  "rulesDirectory": [
-    "./tools/tslint-rules/"
-  ],
+  "extends": "tslint:recommended",
   "rules": {
-    "max-line-length": [true, 120],
-    // Disable this flag because of SHA tslint#48b0c597f9257712c7d1f04b55ed0aa60e333f6a
-    // TSLint now shows warnings if types for properties are inferred. This rule needs to be
-    // disabled because all properties need to have explicit types set to work for Dgeni.
-    "no-inferrable-types": false,
-    "class-name": true,
-    "comment-format": [
+    "array-type": false,
+    "arrow-parens": false,
+    "deprecation": {
+      "severity": "warning"
+    },
+    "component-class-suffix": true,
+    "contextual-lifecycle": true,
+    "directive-class-suffix": true,
+    "directive-selector": [
       true,
-      "check-space"
+      "attribute",
+      "app",
+      "camelCase"
     ],
-    "indent": [
+    "component-selector": [
       true,
-      "spaces"
+      "element",
+      "app",
+      "kebab-case"
     ],
-    "eofline": true,
-    "no-duplicate-variable": true,
-    "no-eval": true,
-    "no-arg": true,
-    "no-internal-module": true,
-    "no-trailing-whitespace": true,
-    "no-bitwise": false,
-    "no-shadowed-variable": true,
-    "no-unused-expression": true,
-    "no-var-keyword": true,
-    "no-exposed-todo": true,
-    "no-debugger": true,
-    "one-line": [
+    "import-blacklist": [
       true,
-      "check-catch",
-      "check-else",
-      "check-open-brace",
-      "check-whitespace"
+      "rxjs/Rx"
     ],
-    "quotemark": [
+    "interface-name": false,
+    "max-classes-per-file": false,
+    "max-line-length": [
       true,
-      "single",
-      "avoid-escape"
+      140
     ],
-    "semicolon": true,
-    "typedef-whitespace": [
+    "member-access": false,
+    "member-ordering": [
       true,
       {
-        "call-signature": "nospace",
-        "index-signature": "nospace",
-        "parameter": "nospace",
-        "property-declaration": "nospace",
-        "variable-declaration": "nospace"
+        "order": [
+          "static-field",
+          "instance-field",
+          "static-method",
+          "instance-method"
+        ]
       }
     ],
-    "curly": true,
-    "variable-name": [
+    "no-consecutive-blank-lines": false,
+    "no-console": [
       true,
-      "ban-keywords",
-      "check-format",
-      "allow-leading-underscore"
+      "debug",
+      "info",
+      "time",
+      "timeEnd",
+      "trace"
     ],
-    "whitespace": [
+    "no-empty": false,
+    "no-inferrable-types": [
       true,
-      "check-branch",
-      "check-decl",
-      "check-operator",
-      "check-separator",
-      "check-type"
+      "ignore-params"
     ],
-    // Bans jasmine helper functions that will prevent the CI from properly running tests.
-    "ban": [true, ["fit"], ["fdescribe"], ["xit"], ["xdescribe"]],
-    // Disallows importing the whole RxJS library. Submodules can be still imported.
-    "import-blacklist": [true, "rxjs"]
-  }
+    "no-non-null-assertion": true,
+    "no-redundant-jsdoc": true,
+    "no-switch-case-fall-through": true,
+    "no-use-before-declare": true,
+    "no-var-requires": false,
+    "object-literal-key-quotes": [
+      true,
+      "as-needed"
+    ],
+    "object-literal-sort-keys": false,
+    "ordered-imports": false,
+    "quotemark": [
+      true,
+      "single"
+    ],
+    "trailing-comma": false,
+    "no-conflicting-lifecycle": true,
+    "no-host-metadata-property": true,
+    "no-input-rename": true,
+    "no-inputs-metadata-property": true,
+    "no-output-native": true,
+    "no-output-on-prefix": true,
+    "no-output-rename": true,
+    "no-outputs-metadata-property": true,
+    "template-banana-in-box": true,
+    "template-no-negated-async": true,
+    "use-lifecycle-interface": true,
+    "use-pipe-transform-interface": true
+  },
+  "rulesDirectory": [
+    "codelyzer"
+  ]
 }
