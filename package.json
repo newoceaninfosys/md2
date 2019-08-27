@@ -8,8 +8,7 @@
     "test": "ng test",
     "lint": "ng lint",
     "e2e": "ng e2e",
-    "build:datepicker": "ng build datepicker",
-    "dev": "npm run build:datepicker && npm run start"
+    "build:datepicker": "ng build datepicker"
   },
   "private": true,
   "dependencies": {
