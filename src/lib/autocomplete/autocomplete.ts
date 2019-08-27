@@ -195,6 +195,9 @@ export class Md2Autocomplete implements AfterContentInit, ControlValueAccessor {
    * @param event
    */
   _handleKeyup(event: KeyboardEvent) {
+    if (this._inputValue === '' || this._inputValue === null) {
+        this._onClear();
+    }
     this.textChange.emit(this._inputValue);
   }
 
@@ -322,7 +325,7 @@ export class Md2Autocomplete implements AfterContentInit, ControlValueAccessor {
       this._list = [];
     } else {
       this._list = this._items.map((i: any) => new Item(i, this.textKey,
-        this.valueKey)).filter(i => new RegExp(this._inputValue, 'ig').test(i.text));
+        this.valueKey)).filter(i => new RegExp(this._inputValue.trim(), 'ig').test(i.text));
       if (this._list.length && this._list[0].text !== this._inputValue) {
         this.selectedItem = null;
       }

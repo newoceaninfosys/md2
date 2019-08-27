@@ -1,3 +1,15 @@
+<a name="0.0.33"></a>
+[0.0.33]
+### Version update
+* Angular version update and solved z-index issue
+
+<a name="0.0.32"></a>
+### solve bug of onClose event in dialog component
+
+<a name="0.0.30"></a>
+### Bug Fixes
+* solved some issues of chips,colorpicker,autocomplete and datepicker
+
 <a name="0.0.29"></a>
 ### Bug Fixes
 * Solved #275 Select component doesnt accept 0 and false values(ngModel) in md2-option
