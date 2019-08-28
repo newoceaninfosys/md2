@@ -1,6 +1,5 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { Md2Datepicker, Md2DatepickerContent } from './datepicker.component';
 import { Md2DatepickerToggle } from './datepicker-toggle';
 import { Md2Calendar } from './calendar';
@@ -18,7 +17,6 @@ import { MdNativeDateModule } from "../core/datetime/module";
 
 @NgModule({
   imports: [
-    BrowserAnimationsModule,
     CommonModule,
     OverlayModule,
     PortalModule,
